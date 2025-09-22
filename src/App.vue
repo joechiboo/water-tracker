@@ -39,8 +39,14 @@
           <h4>☕ 支持作者</h4>
           <p>如果這個工具對你有幫助，歡迎請我喝杯咖啡！</p>
           <div class="linepay-container">
-            <img src="/linePay.png" alt="LINE Pay 贊助" class="linepay-qr">
-            <p class="linepay-text">LINE Pay 贊助</p>
+            <img
+              src="/linePay.png"
+              alt="LINE Pay 贊助"
+              class="linepay-qr"
+              @click="showLinePayModal = true"
+              title="點擊放大"
+            >
+            <p class="linepay-text">LINE Pay 贊助（點擊放大）</p>
           </div>
         </div>
       </div>
@@ -49,11 +55,22 @@
         <p>&copy; 2024 Water Tracker | 用愛與程式碼製作 💙</p>
       </div>
     </footer>
+
+    <!-- LINE Pay 放大模態框 -->
+    <div v-if="showLinePayModal" class="modal-overlay" @click="showLinePayModal = false">
+      <div class="modal-content" @click.stop>
+        <button class="modal-close" @click="showLinePayModal = false">✕</button>
+        <h3>LINE Pay 贊助</h3>
+        <img src="/linePay.png" alt="LINE Pay QR Code" class="modal-qr">
+        <p>掃描 QR Code 即可贊助</p>
+        <p class="modal-tip">謝謝你的支持！💙</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useWaterTracker } from './composables/useWaterTracker'
 import KnowledgeSection from './components/KnowledgeSection.vue'
 import ContainerRef from './components/ContainerRef.vue'
@@ -61,6 +78,9 @@ import WaterProgress from './components/WaterProgress.vue'
 import QuickAdd from './components/QuickAdd.vue'
 
 const { progress, addWater, loadTodayData } = useWaterTracker()
+
+// 響應式資料
+const showLinePayModal = ref(false)
 
 // 頁面載入時讀取當日資料
 onMounted(() => {
@@ -159,6 +179,12 @@ onMounted(() => {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.linepay-qr:hover {
+  transform: scale(1.05);
 }
 
 .linepay-text {
@@ -180,6 +206,104 @@ onMounted(() => {
   color: rgba(255, 255, 255, 0.8);
 }
 
+/* 模態框樣式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+  text-align: center;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.modal-content h3 {
+  color: #2c3e50;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+}
+
+.modal-qr {
+  width: 280px;
+  height: 280px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  margin-bottom: 1.5rem;
+}
+
+.modal-content p {
+  color: #666;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.modal-tip {
+  color: #3498db;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+/* 動畫效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 768px) {
   .footer-content {
     padding: 2rem 1rem;
@@ -189,6 +313,15 @@ onMounted(() => {
   .linepay-qr {
     width: 100px;
     height: 100px;
+  }
+
+  .modal-qr {
+    width: 240px;
+    height: 240px;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
   }
 }
 </style>
