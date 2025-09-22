@@ -1,8 +1,18 @@
 <template>
   <div id="app">
     <header class="app-header">
-      <h1>💧 Water Tracker</h1>
-      <p>每日飲水追蹤器</p>
+      <div class="header-content">
+        <div class="header-text">
+          <h1>💧 Water Tracker</h1>
+          <p>每日飲水追蹤器</p>
+          <div v-if="userSettings" class="user-info">
+            {{ userSettings.warriorName }} | 目標：{{ userSettings.dailyGoal }}ml
+          </div>
+        </div>
+        <button @click="showSettings = true" class="settings-btn" title="設定">
+          ⚙️
+        </button>
+      </div>
     </header>
 
     <main class="app-main">
@@ -66,35 +76,79 @@
         <p class="modal-tip">謝謝你的支持！💙</p>
       </div>
     </div>
+
+    <!-- 用戶設定模態框 -->
+    <UserSettings
+      v-if="showSettings"
+      @close="showSettings = false"
+      @settings-saved="handleSettingsSaved"
+    />
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useWaterTracker } from './composables/useWaterTracker'
+import { useLocalStorage } from './composables/useLocalStorage'
 import KnowledgeSection from './components/KnowledgeSection.vue'
 import ContainerRef from './components/ContainerRef.vue'
 import WaterProgress from './components/WaterProgress.vue'
 import QuickAdd from './components/QuickAdd.vue'
+import UserSettings from './components/UserSettings.vue'
 
-const { progress, addWater, loadTodayData } = useWaterTracker()
+const { progress, addWater, loadTodayData, setDailyGoal } = useWaterTracker()
+const { getItem } = useLocalStorage()
 
 // 響應式資料
 const showLinePayModal = ref(false)
+const showSettings = ref(false)
+const userSettings = ref(null)
 
-// 頁面載入時讀取當日資料
+// 處理設定保存
+const handleSettingsSaved = (data) => {
+  setDailyGoal(data.goal)
+  userSettings.value = {
+    warriorName: data.warrior.name,
+    dailyGoal: data.goal
+  }
+}
+
+// 頁面載入時讀取當日資料和用戶設定
 onMounted(() => {
   loadTodayData()
+
+  // 載入用戶設定
+  const settings = getItem('userSettings')
+  if (settings) {
+    userSettings.value = {
+      warriorName: settings.warriorName,
+      dailyGoal: settings.dailyGoal
+    }
+  } else {
+    // 首次使用，顯示設定
+    showSettings.value = true
+  }
 })
 </script>
 
 <style scoped>
 .app-header {
-  text-align: center;
   padding: 2rem 1rem;
   background: linear-gradient(135deg, #3498db, #2980b9);
   color: white;
   margin-bottom: 2rem;
+}
+
+.header-content {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-text {
+  text-align: left;
 }
 
 .app-header h1 {
@@ -107,6 +161,38 @@ onMounted(() => {
   margin: 0.5rem 0 0 0;
   opacity: 0.9;
   font-size: 1.1rem;
+}
+
+.user-info {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.settings-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 1rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg) scale(1.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .app-main {
@@ -305,6 +391,26 @@ onMounted(() => {
 }
 
 @media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .header-text {
+    text-align: center;
+  }
+
+  .app-header h1 {
+    font-size: 2rem;
+  }
+
+  .settings-btn {
+    min-width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
   .footer-content {
     padding: 2rem 1rem;
     gap: 1.5rem;
