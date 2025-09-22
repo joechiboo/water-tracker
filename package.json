@@ -1,0 +1,22 @@
+{
+  "name": "water-tracker",
+  "version": "1.0.0",
+  "description": "A web application to track daily water intake",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && git subtree push --prefix dist origin gh-pages"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "keywords": ["water", "tracker", "health", "vue"],
+  "author": "",
+  "license": "MIT"
+}
