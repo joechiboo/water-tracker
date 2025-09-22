@@ -203,7 +203,7 @@ onMounted(() => {
 }
 
 .settings-content {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3498db, #2980b9);
   border-radius: 20px;
   padding: 2rem;
   max-width: 900px;
