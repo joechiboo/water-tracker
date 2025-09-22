@@ -37,20 +37,11 @@
 
     <div class="action-buttons">
       <button
-        @click="showResetConfirm = true"
+        @click="handleReset"
         class="btn btn-secondary reset-btn"
       >
         重設今日
       </button>
-    </div>
-
-    <!-- 重設確認對話框 -->
-    <div v-if="showResetConfirm" class="reset-confirm">
-      <p>確定要重設今日記錄嗎？</p>
-      <div class="confirm-buttons">
-        <button @click="confirmReset" class="btn btn-primary">確定</button>
-        <button @click="showResetConfirm = false" class="btn btn-secondary">取消</button>
-      </div>
     </div>
   </div>
 </template>
@@ -66,7 +57,6 @@ const quickAmounts = [100, 250, 500, 1000]
 // 響應式資料
 const customAmount = ref('')
 const animatingButton = ref(null)
-const showResetConfirm = ref(false)
 
 // 計算屬性
 const isValidCustomAmount = computed(() => {
@@ -101,9 +91,8 @@ const handleCustomAdd = () => {
   showSuccessMessage(`已新增 ${amount}ml`)
 }
 
-const confirmReset = () => {
+const handleReset = () => {
   emit('reset-today')
-  showResetConfirm.value = false
   showSuccessMessage('已重設今日記錄')
 }
 
@@ -190,36 +179,6 @@ const showSuccessMessage = (message) => {
   background-color: #c0392b;
 }
 
-.reset-confirm {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  text-align: center;
-}
-
-.reset-confirm::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: -1;
-}
-
-.confirm-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 1rem;
-}
 
 /* 動畫效果 */
 .bounce {
