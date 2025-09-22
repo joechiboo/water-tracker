@@ -134,6 +134,15 @@ onMounted(() => {
     // 首次使用，顯示設定
     showSettings.value = true
   }
+
+  // 預設滾動到核心功能區域
+  setTimeout(() => {
+    const headerHeight = document.querySelector('.app-header')?.offsetHeight || 80
+    window.scrollTo({
+      top: headerHeight * 0.6, // 滾動到header高度的60%，稍微看到一點header
+      behavior: 'smooth'
+    })
+  }, 100)
 })
 </script>
 
