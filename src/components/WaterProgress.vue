@@ -25,11 +25,11 @@
     </div>
 
     <div class="remaining-info" v-if="!progress.achieved">
-      <p>還需要 <strong>{{ progress.remaining }}ml</strong> 達成目標</p>
+      <p>再加 <strong>{{ progress.remaining }}ml</strong> 就更棒了！💪</p>
     </div>
 
     <div class="achievement-message" v-else>
-      <p>🎉 恭喜達成今日目標！</p>
+      <p>🎉 太厲害了！你做得很好！</p>
     </div>
 
     <div class="water-visual">

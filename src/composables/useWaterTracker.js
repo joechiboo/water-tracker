@@ -6,7 +6,7 @@ export function useWaterTracker() {
 
   // 響應式資料
   const currentAmount = ref(0)
-  const dailyGoal = ref(2000)
+  const dailyGoal = ref(800) // 友善的起始目標
   const todayRecords = ref([])
 
   // 計算屬性
