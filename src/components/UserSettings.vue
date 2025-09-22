@@ -203,7 +203,7 @@ onMounted(() => {
 }
 
 .settings-content {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: white;
   border-radius: 20px;
   padding: 2rem;
   max-width: 900px;
@@ -213,16 +213,16 @@ onMounted(() => {
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.4s ease;
-  color: white;
+  color: #333;
 }
 
 .settings-close {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(255, 255, 255, 0.2);
+  background: #f0f0f0;
   border: none;
-  color: white;
+  color: #666;
   font-size: 1.5rem;
   cursor: pointer;
   width: 40px;
@@ -235,8 +235,9 @@ onMounted(() => {
 }
 
 .settings-close:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #e0e0e0;
   transform: rotate(90deg);
+  color: #333;
 }
 
 .settings-header {
@@ -247,7 +248,7 @@ onMounted(() => {
 .settings-header h2 {
   margin: 0 0 0.5rem 0;
   font-size: 2rem;
-  background: linear-gradient(45deg, #fff, #ffd700);
+  background: linear-gradient(45deg, #3498db, #2980b9);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -255,27 +256,27 @@ onMounted(() => {
 
 .settings-header p {
   margin: 0;
-  opacity: 0.9;
+  color: #666;
   font-size: 1.1rem;
 }
 
 /* 已選擇的戰士（縮小顯示） */
 .selected-warrior-mini {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 255, 255, 0.2));
-  border: 2px solid #ffd700;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  border: none;
   border-radius: 16px;
   padding: 1rem;
   margin-bottom: 2rem;
   animation: slideDown 0.4s ease;
   cursor: pointer;
   transition: all 0.3s ease;
+  color: white;
 }
 
 .selected-warrior-mini:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-  border-color: #ffed4e;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.4), rgba(255, 255, 255, 0.3));
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+  background: linear-gradient(135deg, #2980b9, #3498db);
 }
 
 .mini-warrior-content {
@@ -298,7 +299,7 @@ onMounted(() => {
 
 .mini-goal {
   font-size: 1rem;
-  color: #ffd700;
+  color: white;
   font-weight: 600;
 }
 
@@ -306,11 +307,12 @@ onMounted(() => {
   font-size: 0.9rem;
   opacity: 0.8;
   transition: opacity 0.3s ease;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .selected-warrior-mini:hover .change-hint {
   opacity: 1;
-  color: #ffd700;
+  color: white;
 }
 
 .warrior-selection {
@@ -322,20 +324,21 @@ onMounted(() => {
 }
 
 .warrior-card {
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
   border-radius: 16px;
   padding: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  backdrop-filter: blur(10px);
+  color: #333;
 }
 
 .warrior-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-color: #3498db;
+  box-shadow: 0 10px 30px rgba(52, 152, 219, 0.2);
+  background: #e8f4f9;
 }
 
 .warrior-icon {
@@ -362,7 +365,7 @@ onMounted(() => {
   text-align: center;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #ffd700;
+  color: #3498db;
 }
 
 .warrior-power {
@@ -378,10 +381,11 @@ onMounted(() => {
 }
 
 .custom-goal-section {
-  background: rgba(255, 255, 255, 0.1);
+  background: #f8f9fa;
   border-radius: 16px;
   padding: 1.5rem;
   margin-bottom: 2rem;
+  border: 1px solid #e9ecef;
 }
 
 .goal-header {
@@ -396,6 +400,7 @@ onMounted(() => {
 .goal-header h3 {
   margin: 0;
   font-size: 1.2rem;
+  color: #2c3e50;
 }
 
 .goal-input-container {
@@ -405,28 +410,30 @@ onMounted(() => {
 }
 
 .goal-input {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: white;
+  border: 2px solid #3498db;
   border-radius: 10px;
   padding: 0.8rem 1rem;
-  color: white;
+  color: #333;
   font-size: 1.2rem;
   text-align: center;
   width: 200px;
 }
 
 .goal-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: #999;
 }
 
 .goal-input:focus {
   outline: none;
-  border-color: #ffd700;
+  border-color: #2980b9;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
 .goal-unit {
   font-size: 1.2rem;
   font-weight: bold;
+  color: #666;
 }
 
 .goal-suggestions {
@@ -444,6 +451,7 @@ onMounted(() => {
 .suggestions-header h4 {
   margin: 0;
   font-size: 1rem;
+  color: #2c3e50;
 }
 
 .goal-buttons {
@@ -453,9 +461,9 @@ onMounted(() => {
 }
 
 .goal-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  background: white;
+  border: 2px solid #e9ecef;
+  color: #666;
   padding: 0.5rem 1rem;
   border-radius: 25px;
   cursor: pointer;
@@ -464,13 +472,15 @@ onMounted(() => {
 }
 
 .goal-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #f8f9fa;
+  border-color: #3498db;
+  color: #3498db;
 }
 
 .goal-btn.active {
-  background: #ffd700;
-  color: #333;
-  border-color: #ffd700;
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
 }
 
 .motivation-message {
@@ -505,7 +515,7 @@ onMounted(() => {
 }
 
 .save-btn {
-  background: linear-gradient(45deg, #4CAF50, #45a049);
+  background: linear-gradient(45deg, #3498db, #2980b9);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -519,7 +529,8 @@ onMounted(() => {
 
 .save-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+  background: linear-gradient(45deg, #2980b9, #3498db);
 }
 
 .save-btn:disabled {
@@ -528,9 +539,9 @@ onMounted(() => {
 }
 
 .cancel-btn {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: white;
+  color: #666;
+  border: 2px solid #e9ecef;
   padding: 1rem 2rem;
   border-radius: 25px;
   font-size: 1.1rem;
@@ -539,7 +550,9 @@ onMounted(() => {
 }
 
 .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #f8f9fa;
+  border-color: #3498db;
+  color: #3498db;
 }
 
 /* 動畫 */
