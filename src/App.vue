@@ -25,7 +25,7 @@
       <WaterProgress :progress="progress" />
 
       <!-- 快速操作區域 -->
-      <QuickAdd @add-water="addWater" />
+      <QuickAdd @add-water="addWater" @reset-today="resetToday" />
     </main>
 
     <footer class="app-footer">
@@ -101,7 +101,7 @@ import QuickAdd from './components/QuickAdd.vue'
 import UserSettings from './components/UserSettings.vue'
 import HelpCenter from './components/HelpCenter.vue'
 
-const { progress, addWater, loadTodayData, setDailyGoal } = useWaterTracker()
+const { progress, addWater, loadTodayData, setDailyGoal, resetToday } = useWaterTracker()
 const { getItem } = useLocalStorage()
 
 // 響應式資料

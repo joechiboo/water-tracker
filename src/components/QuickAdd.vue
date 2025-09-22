@@ -37,9 +37,8 @@
 
     <div class="action-buttons">
       <button
-        @click="$emit('reset-today')"
+        @click="showResetConfirm = true"
         class="btn btn-secondary reset-btn"
-        @click.prevent="showResetConfirm = true"
       >
         重設今日
       </button>
