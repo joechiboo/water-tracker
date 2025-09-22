@@ -139,10 +139,10 @@ onMounted(() => {
 
 <style scoped>
 .app-header {
-  padding: 2rem 1rem;
+  padding: 1rem 1rem;
   background: linear-gradient(135deg, #3498db, #2980b9);
   color: white;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .header-content {
@@ -159,14 +159,14 @@ onMounted(() => {
 
 .app-header h1 {
   margin: 0;
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
 }
 
 .app-header p {
-  margin: 0.5rem 0 0 0;
+  margin: 0.25rem 0 0 0;
   opacity: 0.9;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .user-info {
@@ -188,13 +188,13 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.3);
   color: white;
-  padding: 1rem;
+  padding: 0.6rem;
   border-radius: 50%;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 60px;
-  height: 60px;
+  min-width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -410,7 +410,7 @@ onMounted(() => {
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
     text-align: center;
   }
 
@@ -419,7 +419,11 @@ onMounted(() => {
   }
 
   .app-header h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
+  }
+
+  .app-header p {
+    font-size: 0.9rem;
   }
 
   .header-buttons {
@@ -427,9 +431,9 @@ onMounted(() => {
   }
 
   .header-btn {
-    min-width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
+    min-width: 40px;
+    height: 40px;
+    font-size: 1rem;
   }
 
   .footer-content {
