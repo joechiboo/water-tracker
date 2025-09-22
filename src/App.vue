@@ -139,7 +139,7 @@ onMounted(() => {
   setTimeout(() => {
     const headerHeight = document.querySelector('.app-header')?.offsetHeight || 80
     window.scrollTo({
-      top: headerHeight * 0.6, // 滾動到header高度的60%，稍微看到一點header
+      top: headerHeight * 0.8, // 滾動到header高度的80%，只看到一點點header
       behavior: 'smooth'
     })
   }, 100)
