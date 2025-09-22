@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Favicon PNG</title>
+</head>
+<body>
+  <h1>Water Drop Favicon Generator</h1>
+  <p>右鍵點擊下面的圖片，選擇「另存圖片」來保存 PNG 格式的 favicon</p>
+
+  <canvas id="canvas" width="32" height="32"></canvas>
+  <br><br>
+  <canvas id="canvas64" width="64" height="64"></canvas>
+  <br><br>
+  <canvas id="canvas128" width="128" height="128"></canvas>
+
+  <script>
+    function drawWaterDrop(canvasId, size) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+
+      // 清除畫布
+      ctx.clearRect(0, 0, size, size);
+
+      // 創建漸層
+      const gradient = ctx.createLinearGradient(0, 0, 0, size);
+      gradient.addColorStop(0, '#3498db');
+      gradient.addColorStop(1, '#2980b9');
+
+      // 繪製水滴形狀
+      ctx.beginPath();
+      ctx.moveTo(size/2, size*0.1);
+      ctx.bezierCurveTo(
+        size*0.2, size*0.3,
+        size*0.15, size*0.6,
+        size/2, size*0.85
+      );
+      ctx.bezierCurveTo(
+        size*0.85, size*0.6,
+        size*0.8, size*0.3,
+        size/2, size*0.1
+      );
+      ctx.closePath();
+
+      // 填充漸層
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // 添加邊框
+      ctx.strokeStyle = '#1e5d88';
+      ctx.lineWidth = size/32;
+      ctx.stroke();
+
+      // 添加高光效果
+      ctx.beginPath();
+      ctx.ellipse(size*0.6, size*0.45, size*0.08, size*0.12, -20 * Math.PI / 180, 0, 2 * Math.PI);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.fill();
+    }
+
+    // 繪製不同尺寸
+    drawWaterDrop('canvas', 32);
+    drawWaterDrop('canvas64', 64);
+    drawWaterDrop('canvas128', 128);
+
+    // 自動下載功能
+    document.querySelectorAll('canvas').forEach(canvas => {
+      canvas.style.border = '1px solid #ccc';
+      canvas.style.margin = '10px';
+      canvas.style.cursor = 'pointer';
+
+      canvas.onclick = function() {
+        const link = document.createElement('a');
+        link.download = `favicon-${canvas.width}x${canvas.height}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      };
+    });
+  </script>
+
+  <p>點擊圖片直接下載對應尺寸的 PNG 檔案</p>
+</body>
+</html>

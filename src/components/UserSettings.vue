@@ -9,14 +9,12 @@
       </div>
 
       <!-- 已選擇的戰士（縮小顯示） -->
-      <div v-if="selectedWarrior" class="selected-warrior-mini">
+      <div v-if="selectedWarrior" class="selected-warrior-mini" @click="selectedWarrior = null">
         <div class="mini-warrior-content">
           <span class="mini-icon">{{ selectedWarrior.icon }}</span>
           <span class="mini-name">{{ selectedWarrior.name }}</span>
           <span class="mini-goal">目標：{{ selectedWarrior.defaultGoal }}ml</span>
-          <button @click="selectedWarrior = null" class="change-warrior-btn">
-            變更戰士
-          </button>
+          <span class="change-hint">點擊變更戰士 ↻</span>
         </div>
       </div>
 
@@ -58,8 +56,9 @@
         </div>
 
         <div class="goal-suggestions">
-          <h4>💡 快速選擇</h4>
-          <div class="goal-buttons">
+          <div class="suggestions-header">
+            <h4>💡 快速選擇</h4>
+            <div class="goal-buttons">
             <button
               v-for="suggestion in goalSuggestions"
               :key="suggestion"
@@ -69,6 +68,7 @@
             >
               {{ suggestion }}ml
             </button>
+            </div>
           </div>
         </div>
 
@@ -267,6 +267,15 @@ onMounted(() => {
   padding: 1rem;
   margin-bottom: 2rem;
   animation: slideDown 0.4s ease;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.selected-warrior-mini:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+  border-color: #ffed4e;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.4), rgba(255, 255, 255, 0.3));
 }
 
 .mini-warrior-content {
@@ -293,20 +302,15 @@ onMounted(() => {
   font-weight: 600;
 }
 
-.change-warrior-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 0.5rem 1.2rem;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
+.change-hint {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
 }
 
-.change-warrior-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
+.selected-warrior-mini:hover .change-hint {
+  opacity: 1;
+  color: #ffd700;
 }
 
 .warrior-selection {
@@ -425,16 +429,27 @@ onMounted(() => {
   font-weight: bold;
 }
 
-.goal-suggestions h4 {
-  margin: 0 0 1rem 0;
-  text-align: center;
+.goal-suggestions {
+  margin-bottom: 1.5rem;
+}
+
+.suggestions-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.suggestions-header h4 {
+  margin: 0;
+  font-size: 1rem;
 }
 
 .goal-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
-  justify-content: center;
 }
 
 .goal-btn {

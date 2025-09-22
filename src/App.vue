@@ -9,19 +9,18 @@
             {{ userSettings.warriorName }} | 目標：{{ userSettings.dailyGoal }}ml
           </div>
         </div>
-        <button @click="showSettings = true" class="settings-btn" title="設定">
-          ⚙️
-        </button>
+        <div class="header-buttons">
+          <button @click="showHelp = true" class="header-btn help-btn" title="幫助中心">
+            ❓
+          </button>
+          <button @click="showSettings = true" class="header-btn settings-btn" title="設定">
+            ⚙️
+          </button>
+        </div>
       </div>
     </header>
 
     <main class="app-main">
-      <!-- 知識科普區域 -->
-      <KnowledgeSection />
-
-      <!-- 容器參考區域 -->
-      <ContainerRef @add-water="addWater" />
-
       <!-- 進度追蹤區域 -->
       <WaterProgress :progress="progress" />
 
@@ -83,6 +82,13 @@
       @close="showSettings = false"
       @settings-saved="handleSettingsSaved"
     />
+
+    <!-- 幫助中心模態框 -->
+    <HelpCenter
+      v-if="showHelp"
+      @close="showHelp = false"
+      @add-water="addWater"
+    />
   </div>
 </template>
 
@@ -90,11 +96,10 @@
 import { onMounted, ref } from 'vue'
 import { useWaterTracker } from './composables/useWaterTracker'
 import { useLocalStorage } from './composables/useLocalStorage'
-import KnowledgeSection from './components/KnowledgeSection.vue'
-import ContainerRef from './components/ContainerRef.vue'
 import WaterProgress from './components/WaterProgress.vue'
 import QuickAdd from './components/QuickAdd.vue'
 import UserSettings from './components/UserSettings.vue'
+import HelpCenter from './components/HelpCenter.vue'
 
 const { progress, addWater, loadTodayData, setDailyGoal } = useWaterTracker()
 const { getItem } = useLocalStorage()
@@ -102,6 +107,7 @@ const { getItem } = useLocalStorage()
 // 響應式資料
 const showLinePayModal = ref(false)
 const showSettings = ref(false)
+const showHelp = ref(false)
 const userSettings = ref(null)
 
 // 處理設定保存
@@ -173,7 +179,12 @@ onMounted(() => {
   display: inline-block;
 }
 
-.settings-btn {
+.header-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.header-btn {
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.3);
   color: white;
@@ -187,6 +198,12 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.help-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .settings-btn:hover {
@@ -405,7 +422,11 @@ onMounted(() => {
     font-size: 2rem;
   }
 
-  .settings-btn {
+  .header-buttons {
+    gap: 0.5rem;
+  }
+
+  .header-btn {
     min-width: 50px;
     height: 50px;
     font-size: 1.2rem;

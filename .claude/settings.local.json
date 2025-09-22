@@ -10,7 +10,8 @@
       "Bash(git push:*)",
       "Bash(node:*)",
       "Bash(npm install)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(start generate-favicon.html)"
     ],
     "deny": [],
     "ask": []
