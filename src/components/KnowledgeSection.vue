@@ -186,7 +186,7 @@
 import { ref, computed } from 'vue'
 
 // 響應式資料
-const isExpanded = ref(false)
+const isExpanded = ref(false) // 預設折疊
 const activeTab = ref('gentle')
 const weight = ref('')
 const activity = ref('medium')

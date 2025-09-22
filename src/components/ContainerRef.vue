@@ -1,9 +1,17 @@
 <template>
   <div class="container-ref card">
-    <h3>常見容器參考</h3>
-    <p class="subtitle">點擊直接新增對應容量</p>
+    <div class="section-header" @click="toggleExpanded">
+      <h3>
+        🍵 常見容器參考
+        <span class="toggle-icon" :class="{ 'expanded': isExpanded }">▼</span>
+      </h3>
+    </div>
 
-    <div class="container-grid">
+    <transition name="slide-fade">
+      <div v-show="isExpanded" class="container-content">
+        <p class="subtitle">點擊直接新增對應容量</p>
+
+        <div class="container-grid">
       <div
         v-for="container in containers"
         :key="container.name"
@@ -22,17 +30,19 @@
           </div>
         </div>
       </div>
-    </div>
+        </div>
 
-    <div class="tips">
-      <h4>💚 溫馨提醒</h4>
-      <ul>
-        <li>每個人的需求都不同，聽聽身體的聲音</li>
-        <li>湯、茶、果汁，所有含水的都算數</li>
-        <li>慢慢喝，享受每一口的感覺</li>
-        <li>今天比昨天多一點點就很棒了！</li>
-      </ul>
-    </div>
+        <div class="tips">
+          <h4>💚 溫馨提醒</h4>
+          <ul>
+            <li>每個人的需求都不同，聽聽身體的聲音</li>
+            <li>湯、茶、果汁，所有含水的都算數</li>
+            <li>慢慢喝，享受每一口的感覺</li>
+            <li>今天比昨天多一點點就很棒了！</li>
+          </ul>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -40,6 +50,15 @@
 import { ref } from 'vue'
 
 const emit = defineEmits(['add-water'])
+
+// 響應式資料
+const isExpanded = ref(false) // 預設折疊
+const animatingContainer = ref(null)
+
+// 方法
+const toggleExpanded = () => {
+  isExpanded.value = !isExpanded.value
+}
 
 // 容器資料
 const containers = [
@@ -93,9 +112,6 @@ const containers = [
   }
 ]
 
-// 響應式資料
-const animatingContainer = ref(null)
-
 // 方法
 const handleContainerAdd = (container) => {
   emit('add-water', container.volume, container.name)
@@ -116,10 +132,34 @@ const showSuccessMessage = (message) => {
 </script>
 
 <style scoped>
-.container-ref h3 {
+.section-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.section-header h3 {
   color: #2c3e50;
-  margin-bottom: 0.5rem;
-  text-align: center;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.toggle-icon {
+  transition: transform 0.3s ease;
+  color: #3498db;
+  font-size: 0.8rem;
+}
+
+.toggle-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.container-content {
+  border-top: 1px solid #e9ecef;
+  padding-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .subtitle {
@@ -251,6 +291,22 @@ const showSuccessMessage = (message) => {
   .tips {
     padding: 1rem;
   }
+}
+
+/* 動畫效果 */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
 @media (max-width: 480px) {

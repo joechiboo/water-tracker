@@ -27,6 +27,7 @@
           :key="warrior.id"
           @click="selectWarrior(warrior)"
           class="warrior-card"
+        >
           <div class="warrior-icon">{{ warrior.icon }}</div>
           <div class="warrior-name">{{ warrior.name }}</div>
           <div class="warrior-title">{{ warrior.title }}</div>
@@ -40,8 +41,9 @@
 
       <!-- 自訂目標區域（選擇戰士後顯示） -->
       <div v-if="selectedWarrior" class="custom-goal-section" :class="{ 'show': selectedWarrior }">
-        <h3>🎯 自訂你的每日目標</h3>
-        <div class="goal-input-container">
+        <div class="goal-header">
+          <h3>🎯 自訂你的每日目標</h3>
+          <div class="goal-input-container">
           <input
             v-model.number="customGoal"
             type="number"
@@ -52,6 +54,7 @@
             placeholder="輸入目標 (ml)"
           >
           <span class="goal-unit">ml</span>
+          </div>
         </div>
 
         <div class="goal-suggestions">
@@ -377,17 +380,24 @@ onMounted(() => {
   margin-bottom: 2rem;
 }
 
-.custom-goal-section h3 {
-  margin: 0 0 1rem 0;
-  text-align: center;
+.goal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.goal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
 }
 
 .goal-input-container {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
 }
 
 .goal-input {
