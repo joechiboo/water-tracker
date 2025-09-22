@@ -8,14 +8,25 @@
         <p>每個戰士都有獨特的能力和目標！</p>
       </div>
 
-      <div class="warrior-selection">
+      <!-- 已選擇的戰士（縮小顯示） -->
+      <div v-if="selectedWarrior" class="selected-warrior-mini">
+        <div class="mini-warrior-content">
+          <span class="mini-icon">{{ selectedWarrior.icon }}</span>
+          <span class="mini-name">{{ selectedWarrior.name }}</span>
+          <span class="mini-goal">目標：{{ selectedWarrior.defaultGoal }}ml</span>
+          <button @click="selectedWarrior = null" class="change-warrior-btn">
+            變更戰士
+          </button>
+        </div>
+      </div>
+
+      <!-- 戰士選擇卡片 -->
+      <div v-if="!selectedWarrior" class="warrior-selection">
         <div
           v-for="warrior in warriors"
           :key="warrior.id"
           @click="selectWarrior(warrior)"
           class="warrior-card"
-          :class="{ 'selected': selectedWarrior?.id === warrior.id }"
-        >
           <div class="warrior-icon">{{ warrior.icon }}</div>
           <div class="warrior-name">{{ warrior.name }}</div>
           <div class="warrior-title">{{ warrior.title }}</div>
@@ -24,14 +35,11 @@
             <strong>特殊能力：</strong>{{ warrior.power }}
           </div>
           <div class="warrior-desc">{{ warrior.description }}</div>
-
-          <div v-if="selectedWarrior?.id === warrior.id" class="selected-indicator">
-            ✨ 已選擇 ✨
-          </div>
         </div>
       </div>
 
-      <div v-if="selectedWarrior" class="custom-goal-section">
+      <!-- 自訂目標區域（選擇戰士後顯示） -->
+      <div v-if="selectedWarrior" class="custom-goal-section" :class="{ 'show': selectedWarrior }">
         <h3>🎯 自訂你的每日目標</h3>
         <div class="goal-input-container">
           <input
@@ -248,11 +256,62 @@ onMounted(() => {
   font-size: 1.1rem;
 }
 
+/* 已選擇的戰士（縮小顯示） */
+.selected-warrior-mini {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 255, 255, 0.2));
+  border: 2px solid #ffd700;
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  animation: slideDown 0.4s ease;
+}
+
+.mini-warrior-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.mini-icon {
+  font-size: 2rem;
+}
+
+.mini-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  flex: 1;
+}
+
+.mini-goal {
+  font-size: 1rem;
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.change-warrior-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.change-warrior-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
 .warrior-selection {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin-bottom: 2rem;
+  animation: fadeIn 0.4s ease;
 }
 
 .warrior-card {
@@ -270,12 +329,6 @@ onMounted(() => {
   transform: translateY(-5px);
   border-color: rgba(255, 255, 255, 0.4);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.warrior-card.selected {
-  border-color: #ffd700;
-  background: rgba(255, 215, 0, 0.2);
-  transform: translateY(-5px) scale(1.02);
 }
 
 .warrior-icon {
@@ -315,19 +368,6 @@ onMounted(() => {
   font-size: 0.85rem;
   opacity: 0.9;
   line-height: 1.4;
-}
-
-.selected-indicator {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #ffd700;
-  color: #333;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  animation: pulse 2s infinite;
 }
 
 .custom-goal-section {
@@ -494,6 +534,17 @@ onMounted(() => {
   }
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.1); }
@@ -514,6 +565,11 @@ onMounted(() => {
   .settings-content {
     padding: 1.5rem;
     margin: 0.5rem;
+  }
+
+  .selected-warrior-mini .mini-warrior-content {
+    flex-direction: column;
+    text-align: center;
   }
 
   .warrior-selection {
