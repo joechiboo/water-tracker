@@ -324,21 +324,21 @@ onMounted(() => {
 }
 
 .warrior-card {
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   padding: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  color: #333;
+  color: white;
 }
 
 .warrior-card:hover {
   transform: translateY(-5px);
-  border-color: #3498db;
-  box-shadow: 0 10px 30px rgba(52, 152, 219, 0.2);
-  background: #e8f4f9;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #2980b9, #3498db);
 }
 
 .warrior-icon {
@@ -365,7 +365,7 @@ onMounted(() => {
   text-align: center;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #3498db;
+  color: #ffd700;
 }
 
 .warrior-power {
