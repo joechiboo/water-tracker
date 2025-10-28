@@ -164,9 +164,24 @@ export function useIdleReminder(options = {}) {
     stopIdleEffects()
   })
 
+  // 手動觸發提醒（用於測試）
+  const manualTrigger = () => {
+    if (idleLevel.value === 0) {
+      // 從正常 -> 輕度
+      startIdleEffects(1)
+    } else if (idleLevel.value === 1) {
+      // 從輕度 -> 嚴重
+      startIdleEffects(2)
+    } else {
+      // 從嚴重 -> 正常
+      stopIdleEffects()
+    }
+  }
+
   return {
     idleLevel,
     updateActivity,
-    lastActivityTime
+    lastActivityTime,
+    manualTrigger
   }
 }

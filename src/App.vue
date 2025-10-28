@@ -3,7 +3,9 @@
     <header class="app-header">
       <div class="header-content">
         <div class="header-text">
-          <h1>💧 Water Tracker</h1>
+          <h1 @click="manualTrigger" class="clickable-logo" :title="getIdleLevelHint()">
+            💧 Water Tracker
+          </h1>
           <p>每日飲水追蹤器</p>
           <div v-if="userSettings" class="user-info">
             {{ userSettings.warriorName }} | 目標：{{ userSettings.dailyGoal }}ml
@@ -106,7 +108,7 @@ const { progress, addWater, loadTodayData, setDailyGoal, resetToday, getLastDrin
 const { getItem } = useLocalStorage()
 
 // 閒置提醒功能
-const { idleLevel, updateActivity } = useIdleReminder({
+const { idleLevel, updateActivity, manualTrigger } = useIdleReminder({
   lightIdleThreshold: 2 * 60 * 60 * 1000,  // 2 小時
   severeIdleThreshold: 4 * 60 * 60 * 1000  // 4 小時
 })
@@ -127,6 +129,16 @@ const handleAddWater = (amount, container) => {
 const handleResetToday = () => {
   resetToday()
   updateActivity() // 更新最後活動時間
+}
+
+// 獲取閒置等級提示文字
+const getIdleLevelHint = () => {
+  const hints = {
+    0: '點擊測試輕度提醒',
+    1: '點擊測試強烈提醒',
+    2: '點擊關閉提醒'
+  }
+  return hints[idleLevel.value] || '點擊測試提醒'
 }
 
 // 處理設定保存
@@ -199,6 +211,21 @@ onMounted(() => {
   margin: 0;
   font-size: 1.8rem;
   font-weight: 600;
+}
+
+.clickable-logo {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.clickable-logo:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.clickable-logo:active {
+  transform: scale(0.95);
 }
 
 .app-header p {
