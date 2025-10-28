@@ -26,7 +26,8 @@ export function useWaterTracker() {
         minute: '2-digit'
       }),
       amount,
-      container
+      container,
+      timestamp: Date.now() // 新增時間戳記用於閒置檢測
     }
 
     todayRecords.value.push(record)
@@ -37,6 +38,15 @@ export function useWaterTracker() {
     if (progress.value.achieved && currentAmount.value - amount < dailyGoal.value) {
       triggerCelebration()
     }
+  }
+
+  // 獲取最後一次喝水的時間
+  const getLastDrinkTime = () => {
+    if (todayRecords.value.length === 0) {
+      return null
+    }
+    const lastRecord = todayRecords.value[todayRecords.value.length - 1]
+    return lastRecord.timestamp || null
   }
 
   // 重設當日記錄
@@ -137,6 +147,7 @@ export function useWaterTracker() {
     resetToday,
     loadTodayData,
     setDailyGoal,
-    getHistoryData
+    getHistoryData,
+    getLastDrinkTime
   }
 }

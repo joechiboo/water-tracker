@@ -25,7 +25,7 @@
       <WaterProgress :progress="progress" />
 
       <!-- 快速操作區域 -->
-      <QuickAdd @add-water="addWater" @reset-today="resetToday" />
+      <QuickAdd @add-water="handleAddWater" @reset-today="handleResetToday" />
     </main>
 
     <footer class="app-footer">
@@ -87,28 +87,47 @@
     <HelpCenter
       v-if="showHelp"
       @close="showHelp = false"
-      @add-water="addWater"
+      @add-water="handleAddWater"
     />
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useWaterTracker } from './composables/useWaterTracker'
 import { useLocalStorage } from './composables/useLocalStorage'
+import { useIdleReminder } from './composables/useIdleReminder'
 import WaterProgress from './components/WaterProgress.vue'
 import QuickAdd from './components/QuickAdd.vue'
 import UserSettings from './components/UserSettings.vue'
 import HelpCenter from './components/HelpCenter.vue'
 
-const { progress, addWater, loadTodayData, setDailyGoal, resetToday } = useWaterTracker()
+const { progress, addWater, loadTodayData, setDailyGoal, resetToday, getLastDrinkTime } = useWaterTracker()
 const { getItem } = useLocalStorage()
+
+// 閒置提醒功能
+const { idleLevel, updateActivity } = useIdleReminder({
+  lightIdleThreshold: 2 * 60 * 60 * 1000,  // 2 小時
+  severeIdleThreshold: 4 * 60 * 60 * 1000  // 4 小時
+})
 
 // 響應式資料
 const showLinePayModal = ref(false)
 const showSettings = ref(false)
 const showHelp = ref(false)
 const userSettings = ref(null)
+
+// 包裝 addWater 函數，加入閒置追蹤
+const handleAddWater = (amount, container) => {
+  addWater(amount, container)
+  updateActivity() // 更新最後活動時間
+}
+
+// 包裝 resetToday 函數
+const handleResetToday = () => {
+  resetToday()
+  updateActivity() // 更新最後活動時間
+}
 
 // 處理設定保存
 const handleSettingsSaved = (data) => {
@@ -133,6 +152,16 @@ onMounted(() => {
   } else {
     // 首次使用，顯示設定
     showSettings.value = true
+  }
+
+  // 如果今天已經有喝水記錄，使用最後一次喝水的時間作為起點
+  const lastDrinkTime = getLastDrinkTime()
+  if (lastDrinkTime) {
+    updateActivity() // 使用當前時間初始化
+    // 注意：這裡我們不直接設置 lastActivityTime，而是讓系統自動檢測
+  } else {
+    // 如果今天還沒喝水，使用當前時間
+    updateActivity()
   }
 
   // 預設滾動到核心功能區域
