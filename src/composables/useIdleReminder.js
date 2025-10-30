@@ -116,18 +116,37 @@ export function useIdleReminder(options = {}) {
         if (scale >= params.maxScale) growing = false
         if (scale <= 1) growing = true
 
-        // 創建動態 SVG
+        // 創建動態 SVG - 美化的水滴形狀
+        const dropY = 50 + (params.maxScale - scale) * 25
         const svg = `
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
             <defs>
               <linearGradient id="waterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" style="stop-color:${params.color};stop-opacity:1" />
+                <stop offset="0%" style="stop-color:${params.color};stop-opacity:0.9" />
+                <stop offset="50%" style="stop-color:${params.color};stop-opacity:1" />
                 <stop offset="100%" style="stop-color:${params.color === '#e74c3c' ? '#c0392b' : '#2980b9'};stop-opacity:1" />
               </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+              <radialGradient id="highlight">
+                <stop offset="0%" style="stop-color:white;stop-opacity:0.5" />
+                <stop offset="100%" style="stop-color:white;stop-opacity:0" />
+              </radialGradient>
             </defs>
-            <ellipse cx="50" cy="${50 + (params.maxScale - scale) * 25}" rx="${30 * scale}" ry="${40 * scale}" fill="url(#waterGrad)">
-              <animate attributeName="cy" values="50;${40 - level * 5};50" dur="${level === 2 ? '0.3s' : '0.6s'}" repeatCount="indefinite"/>
-            </ellipse>
+            <g transform="translate(50, ${dropY}) scale(${scale})">
+              <!-- 水滴主體 -->
+              <path d="M 0,-32 C -12,-32 -22,-20 -24,-5 C -25,8 -18,22 -10,28 C -5,32 0,35 0,35 C 0,35 5,32 10,28 C 18,22 25,8 24,-5 C 22,-20 12,-32 0,-32 Z"
+                    fill="url(#waterGrad)"
+                    filter="url(#glow)"/>
+              <!-- 高光效果 -->
+              <ellipse cx="-7" cy="-12" rx="8" ry="10" fill="url(#highlight)" opacity="0.7"/>
+              <ellipse cx="-10" cy="-18" rx="4" ry="5" fill="white" opacity="0.4"/>
+            </g>
           </svg>
         `
         const blob = new Blob([svg], { type: 'image/svg+xml' })

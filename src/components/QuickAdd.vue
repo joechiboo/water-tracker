@@ -4,13 +4,19 @@
 
     <div class="quick-buttons">
       <button
-        v-for="amount in quickAmounts"
+        v-for="amount in sortedAllAmounts"
         :key="amount"
         @click="handleQuickAdd(amount)"
         class="btn btn-primary btn-large quick-btn"
-        :class="{ 'bounce': animatingButton === amount }"
+        :class="{
+          'bounce': animatingButton === amount,
+          'custom-amount': isCustomAmount(amount)
+        }"
+        @contextmenu.prevent="isCustomAmount(amount) && removeCustomAmount(amount)"
+        :title="isCustomAmount(amount) ? '右鍵點擊移除自訂義容量' : ''"
       >
         +{{ amount }}ml
+        <span v-if="isCustomAmount(amount)" class="custom-badge">自訂</span>
       </button>
     </div>
 
@@ -47,22 +53,47 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const emit = defineEmits(['add-water', 'reset-today'])
 
-// 預設快速新增選項
-const quickAmounts = [100, 250, 500, 1000]
+// 預設快速新增選項 - 改為 50, 100, 250, 500
+const defaultQuickAmounts = [50, 100, 250, 500]
 
 // 響應式資料
+const quickAmounts = ref([...defaultQuickAmounts])
 const customAmount = ref('')
 const animatingButton = ref(null)
+const customAmounts = ref([]) // 儲存自訂義容量
+
+// 計算屬性 - 合併並排序所有容量選項
+const sortedAllAmounts = computed(() => {
+  const allAmounts = [...new Set([...defaultQuickAmounts, ...customAmounts.value])]
+  return allAmounts.sort((a, b) => a - b)
+})
 
 // 計算屬性
 const isValidCustomAmount = computed(() => {
   const amount = Number(customAmount.value)
   return amount > 0 && amount <= 2000
 })
+
+// 載入儲存的自訂義容量
+onMounted(() => {
+  const saved = localStorage.getItem('customWaterAmounts')
+  if (saved) {
+    try {
+      customAmounts.value = JSON.parse(saved)
+    } catch (e) {
+      console.error('Failed to load custom amounts:', e)
+    }
+  }
+})
+
+// 儲存自訂義容量
+const saveCustomAmounts = () => {
+  localStorage.setItem('customWaterAmounts', JSON.stringify(customAmounts.value))
+}
 
 // 方法
 const handleQuickAdd = (amount) => {
@@ -82,6 +113,13 @@ const handleCustomAdd = () => {
   if (!isValidCustomAmount.value) return
 
   const amount = Number(customAmount.value)
+
+  // 新增到自訂義容量列表（避免重複）
+  if (!defaultQuickAmounts.includes(amount) && !customAmounts.value.includes(amount)) {
+    customAmounts.value.push(amount)
+    saveCustomAmounts()
+  }
+
   emit('add-water', amount, `自定義 ${amount}ml`)
 
   // 清空輸入框
@@ -89,6 +127,15 @@ const handleCustomAdd = () => {
 
   // 顯示成功回饋
   showSuccessMessage(`已新增 ${amount}ml`)
+}
+
+const removeCustomAmount = (amount) => {
+  const index = customAmounts.value.indexOf(amount)
+  if (index > -1) {
+    customAmounts.value.splice(index, 1)
+    saveCustomAmounts()
+    showSuccessMessage(`已移除自訂義容量 ${amount}ml`)
+  }
 }
 
 const handleReset = () => {
@@ -99,6 +146,11 @@ const handleReset = () => {
 const showSuccessMessage = (message) => {
   // 這裡可以整合通知系統
   console.log('✅', message)
+}
+
+// 判斷是否為自訂義容量
+const isCustomAmount = (amount) => {
+  return customAmounts.value.includes(amount)
 }
 </script>
 
@@ -179,6 +231,28 @@ const showSuccessMessage = (message) => {
   background-color: #c0392b;
 }
 
+
+/* 自訂義容量按鈕樣式 */
+.custom-amount {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.custom-amount:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b409f 100%);
+}
+
+.custom-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 10px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+}
 
 /* 動畫效果 */
 .bounce {
