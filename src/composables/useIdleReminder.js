@@ -69,8 +69,13 @@ export function useIdleReminder(options = {}) {
     // Favicon 跳動效果
     startFaviconAnimation(level)
 
-    // 只有嚴重閒置才加頁面搖晃
-    if (level === 2) {
+    // 根據等級添加不同的效果
+    if (level === 1) {
+      // 輕度：背景乾裂效果
+      document.body.classList.add('idle-crack-light')
+    } else if (level === 2) {
+      // 嚴重：背景乾裂效果 + 頁面搖晃
+      document.body.classList.add('idle-crack-severe')
       document.body.classList.add('idle-shake')
     }
   }
@@ -80,8 +85,10 @@ export function useIdleReminder(options = {}) {
     idleLevel.value = 0
     onIdleEnd()
 
-    // 移除頁面搖晃
+    // 移除所有視覺效果
     document.body.classList.remove('idle-shake')
+    document.body.classList.remove('idle-crack-light')
+    document.body.classList.remove('idle-crack-severe')
 
     // 恢復標題
     if (titleInterval) {
